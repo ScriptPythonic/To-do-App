@@ -11,6 +11,11 @@ def main(page: Page):
     page.horizontal_alignment ='center'
     page.vertical_alignment='center'
     
+    __main_column__ = Column(
+        scroll='hidden
+        expand=True'
+    )
+    
     #create the backgrund  and  main container
     page.add(
     Container(

@@ -13,13 +13,28 @@ def main(page: Page):
     
     #create the backgrund  and  main container
     page.add(
-        Container(
-            width=1500,
-            height=800,
-            margin=10,
-            bgcolor='bluegrey900'
+    Container(
+        width=1500,
+        height=800,
+        margin=10,
+        bgcolor='bluegrey900',  # Add a comma here
+        alignment=alignment.center,
+        content=Row(
+            alignment=MainAxisAlignment.CENTER,  # Add a comma here
+            vertical_alignment=CrossAxisAlignment.CENTER,  # Add a comma here
+            controls=[
+                Container(
+                    width=280, 
+                    height=600, 
+                    bgcolor='#0f0f0f',
+                    border_radius=40,
+                        
+                )
+            ]
         )
     )
+)
+
     page.update()
     
     pass

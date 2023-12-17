@@ -9,7 +9,8 @@ import sqlite3
 
 
 class FormContainer(UserControl):
-    def __init__(self):
+    def __init__(self , func ):
+        self.func = func  
         super().__init__()
         
     def build(self):
@@ -35,20 +36,76 @@ class FormContainer(UserControl):
                         hint_style=TextStyle(size=11, color="black"),
                     ),
                     IconButton(
-                        content=Text('Add Task', width=180, 
+                        content=Text('Add Task'), width=180, 
                                      height=44,
+                                     on_click =self.func , # pass the function here 
                                      style=ButtonStyle(
                                          bgcolor={"": 'black'},
-                                         shape={"": RoundedRectangleBorder(radius=8)},
-                                     ))
+                                         shape={"":RoundedRectangleBorder(radius=8)},
+                              
+                            )
                     ),
                 ],
             ),
         )
         
+class CreateTask(UserControl):
+    def __init__(self,task:str,date:str):
+        self.task = task
+        self.date = date
+        super().__init__()
+        
+        
+        def TaskDeleteEdit(self,name, color):
+            return IconButton(
+                icon=name,
+                width=30,
+                icon_size=1,
+                icon_color=color,
+                opacity=0,
+                animate_opacity=200,
+                on_click=None,
+                
+            )
+        
+    def build(self):
+        return Container(
+            width=200,
+            height=60,
+            border=border.all(0.85,"white54"),
+            border_radius=8,
+            on_hover=None,
+            clip_behavior=ClipBehavior.HARD_EDGE,
+            padding=10,
+            content=[
+                Column(
+                    spacing=1,
+                    alignment=MainAxisAlignment.SPACE_BETWEEN,
+                    controls=[
+                        Text(value=self.task, size=10),
+                        Text(value=self.date, size=9, color="white54"),
+                    ],
+                ),
+                Row (
+                    spacing=0,
+                    alignment=MainAxisAlignment.CENTER,
+                    controls=[
+                        self.TaskDeleEdit(icons.DELETE_ROUNDED,"red500"),
+                        self.TaskDeleEdit(icons.EDIT_ROUNDED,"white500"),
+                        
+                    ]
+                )
+            ],  
+        )
+        
+        
+        
 def main(page: Page):
     page.horizontal_alignment ='center'
     page.vertical_alignment='center'
+    
+    def AddTaskToScreen(e):
+        pass 
     
     #function to show and hide the form container
     
@@ -106,7 +163,7 @@ def main(page: Page):
                             expand=True,
                             controls=[
                                 __main_column__,
-                                FormContainer(),
+                                FormContainer(lambda e: AddTaskToScreen),
                             ]
                         )
                     )

@@ -18,7 +18,7 @@ class FormContainer(UserControl):
             width=280, 
             height=80,
             bgcolor="bluegrey500",
-            opacity=1,
+            opacity=0,
             border_radius=40,
             margin=margin.only(left=20, right=20),
             animate=animation.Animation(400,"decelerate"),
@@ -42,7 +42,6 @@ class FormContainer(UserControl):
                                      style=ButtonStyle(
                                          bgcolor={"": 'black'},
                                          shape={"":RoundedRectangleBorder(radius=8)},
-                              
                             )
                     ),
                 ],
@@ -60,17 +59,16 @@ class CreateTask(UserControl):
             return IconButton(
                 icon=name,
                 width=30,
-                icon_size=1,
+                icon_size=18,
                 icon_color=color,
                 opacity=0,
                 animate_opacity=200,
                 on_click=None,
-                
             )
         
     def build(self):
         return Container(
-            width=200,
+            width=280,
             height=60,
             border=border.all(0.85,"white54"),
             border_radius=8,
@@ -90,8 +88,8 @@ class CreateTask(UserControl):
                     spacing=0,
                     alignment=MainAxisAlignment.CENTER,
                     controls=[
-                        self.TaskDeleEdit(icons.DELETE_ROUNDED,"red500"),
-                        self.TaskDeleEdit(icons.EDIT_ROUNDED,"white500"),
+                        self.TaskDeleteEdit(icons.DELETE_ROUNDED,"red500"),
+                        self.TaskDeleteEdit(icons.EDIT_ROUNDED,"white700"),
                         
                     ]
                 )
@@ -105,26 +103,35 @@ def main(page: Page):
     page.vertical_alignment='center'
     
     def AddTaskToScreen(e):
-        pass 
-    
+        dateTime = datetime.now().strftime("%b %d,  %Y %I:%M ")
+        if form.content.controls[0].value:
+            _main_column_.controls.append( 
+                CreateTask(
+                    form.content.controls[0].value,
+                    dateTime,
+                )
+              )
+            
+            _main_column_.update()
+        
     #function to show and hide the form container
     
     def CreateToDoTask(e):
         if form.height != 200:
-            form.height = 200
+            form.height , form.opacity = 200, 1
             form.update()
         else:
-            form.height = 80
+            form.height , form.opacity  = 80, 0
             form.update()
         pass
     
-    __main_column__ = Column(
+    _main_column_ = Column(
         scroll='hidden',
         expand=True,
         alignment=MainAxisAlignment.START,
         controls=[
             Row(
-                alignment=MainAxisAlignment.SPACE_BETWEEN,  # Assuming your framework uses 'space-between' instead of MainAxisAlignment.SPACE_BETWEEN
+                alignment=MainAxisAlignment.SPACE_BETWEEN,  
                 controls=[
                     Text("To-Do Items", size=18, weight="bold"),
                     IconButton(
@@ -162,7 +169,7 @@ def main(page: Page):
                             alignment=MainAxisAlignment.CENTER, 
                             expand=True,
                             controls=[
-                                __main_column__,
+                                _main_column_,
                                 FormContainer(lambda e: AddTaskToScreen),
                             ]
                         )

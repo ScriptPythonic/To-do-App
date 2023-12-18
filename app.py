@@ -47,14 +47,14 @@ class FormContainer(UserControl):
                 ],
             ),
         )
-        
+    #function is the create task
 class CreateTask(UserControl):
     def __init__(self,task:str,date:str):
         self.task = task
         self.date = date
         super().__init__()
         
-        
+        #function to delete task on the app
         def TaskDeleteEdit(self,name, color):
             return IconButton(
                 icon=name,
@@ -97,11 +97,11 @@ class CreateTask(UserControl):
         )
         
         
-        
+        # here is creating the main page 
 def main(page: Page):
     page.horizontal_alignment ='center'
     page.vertical_alignment='center'
-    
+    #function is to add task to screen 
     def AddTaskToScreen(e):
         dateTime = datetime.now().strftime("%b %d,  %Y %I:%M ")
         if form.content.controls[0].value:
@@ -179,6 +179,8 @@ def main(page: Page):
         )
     )
 
+
+#here i where all function are been called 
     page.update()
     form =page.controls[0].content.controls[0].content.controls[1].controls[0]
 

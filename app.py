@@ -1,7 +1,8 @@
 """
-This is a to do app 
-Created By : ScriptPythonic 
+This is a to-do app
+Created By: ScriptPythonic
 """
+
 import flet
 from flet import *
 from datetime import datetime
@@ -9,11 +10,18 @@ import sqlite3
 
 
 class FormContainer(UserControl):
-    def __init__(self , func ):
+    """
+    This class defines a form container for adding tasks.
+    """
+
+    def __init__(self, func):
         self.func = func  
         super().__init__()
-        
+
     def build(self):
+        """
+        Builds the UI components for the form container.
+        """
         return Container(
             width=280, 
             height=80,
@@ -21,9 +29,9 @@ class FormContainer(UserControl):
             opacity=0,
             border_radius=40,
             margin=margin.only(left=20, right=20),
-            animate=animation.Animation(400,"decelerate"),
+            animate=animation.Animation(400, "decelerate"),
             animate_opacity=200,
-            padding=padding.only(top=45,bottom=45), 
+            padding=padding.only(top=45, bottom=45), 
             content=Column(
                 horizontal_alignment=CrossAxisAlignment.CENTER,
                 controls=[
@@ -31,46 +39,56 @@ class FormContainer(UserControl):
                         height=48,
                         width=225,
                         filled=True,
-                        #border_color="transparent",
                         hint_text="Description ......",
                         hint_style=TextStyle(size=11, color="black"),
                     ),
                     IconButton(
-                        content=Text('Add Task'), width=180, 
-                                     height=44,
-                                     on_click =self.func , # pass the function here 
-                                     style=ButtonStyle(
-                                         bgcolor={"": 'black'},
-                                         shape={"":RoundedRectangleBorder(radius=8)},
-                            )
+                        content=Text('Add Task'),
+                        width=180, 
+                        height=44,
+                        on_click=self.func,  # pass the function here 
+                        style=ButtonStyle(
+                            bgcolor={"": 'black'},
+                            shape={"": RoundedRectangleBorder(radius=8)},
+                        )
                     ),
                 ],
             ),
         )
-    #function is the create task
+
+
 class CreateTask(UserControl):
-    def __init__(self,task:str,date:str):
+    """
+    This class defines a task container for displaying tasks.
+    """
+
+    def __init__(self, task: str, date: str):
         self.task = task
         self.date = date
         super().__init__()
-        
-        #function to delete task on the app
-        def TaskDeleteEdit(self,name, color):
-            return IconButton(
-                icon=name,
-                width=30,
-                icon_size=18,
-                icon_color=color,
-                opacity=0,
-                animate_opacity=200,
-                on_click=None,
-            )
-        
+
+    def TaskDeleteEdit(self, name, color):
+        """
+        Creates a button for deleting or editing a task.
+        """
+        return IconButton(
+            icon=name,
+            width=30,
+            icon_size=18,
+            icon_color=color,
+            opacity=0,
+            animate_opacity=200,
+            on_click=None,
+        )
+
     def build(self):
+        """
+        Builds the UI components for the task container.
+        """
         return Container(
             width=280,
             height=60,
-            border=border.all(0.85,"white54"),
+            border=border.all(0.85, "white54"),
             border_radius=8,
             on_hover=None,
             clip_behavior=ClipBehavior.HARD_EDGE,
@@ -84,68 +102,71 @@ class CreateTask(UserControl):
                         Text(value=self.date, size=9, color="white54"),
                     ],
                 ),
-                Row (
+                Row(
                     spacing=0,
                     alignment=MainAxisAlignment.CENTER,
                     controls=[
-                        self.TaskDeleteEdit(icons.DELETE_ROUNDED,"red500"),
-                        self.TaskDeleteEdit(icons.EDIT_ROUNDED,"white700"),
-                        
+                        self.TaskDeleteEdit(icons.DELETE_ROUNDED, "red500"),
+                        self.TaskDeleteEdit(icons.EDIT_ROUNDED, "white700"),
                     ]
                 )
             ],  
         )
-        
-        
-        # here is creating the main page 
+
+
 def main(page: Page):
-    page.horizontal_alignment ='center'
-    page.vertical_alignment='center'
-    #function is to add task to screen 
+    """
+    Main function to set up the page and handle interactions.
+    """
+    page.horizontal_alignment = 'center'
+    page.vertical_alignment = 'center'
+
     def AddTaskToScreen(e):
+        """
+        Function to add a task to the screen.
+        """
         dateTime = datetime.now().strftime("%b %d,  %Y %I:%M ")
         if form.content.controls[0].value:
-            _main_column_.controls.append( 
+            _main_column_.controls.append(
                 CreateTask(
                     form.content.controls[0].value,
                     dateTime,
                 )
-              )
-            
+            )
             _main_column_.update()
-        
-    #function to show and hide the form container
-    
+
     def CreateToDoTask(e):
+        """
+        Function to show and hide the form container.
+        """
         if form.height != 200:
-            form.height , form.opacity = 200, 1
+            form.height, form.opacity = 200, 1
             form.update()
         else:
-            form.height , form.opacity  = 80, 0
+            form.height, form.opacity = 80, 0
             form.update()
-        pass
-    
+
     _main_column_ = Column(
         scroll='hidden',
         expand=True,
         alignment=MainAxisAlignment.START,
         controls=[
             Row(
-                alignment=MainAxisAlignment.SPACE_BETWEEN,  
+                alignment=MainAxisAlignment.SPACE_BETWEEN,
                 controls=[
                     Text("To-Do Items", size=18, weight="bold"),
                     IconButton(
                         icons.ADD_CIRCLE_ROUNDED,
                         icon_size=18,
-                       on_click=lambda e: CreateToDoTask(e),
+                        on_click=lambda e: CreateToDoTask(e),
                     ),
                 ],
             ),
             Divider(height=8, color="white24")
         ],
     )
-    
-    #create the backgrund  and  main container
+
+    # Create the background and main container
     page.add(
         Container(
             width=1500,
@@ -162,11 +183,11 @@ def main(page: Page):
                         height=600,
                         bgcolor="#0f0f0f",
                         border_radius=40,
-                        border=border.all(0.5,"white"),
-                        padding=padding.only(top=35,left=20,right=20),
-                        clip_behavior=ClipBehavior.HARD_EDGE ,#clip content to the container
-                        content= Column(
-                            alignment=MainAxisAlignment.CENTER, 
+                        border=border.all(0.5, "white"),
+                        padding=padding.only(top=35, left=20, right=20),
+                        clip_behavior=ClipBehavior.HARD_EDGE,  # Clip content to the container
+                        content=Column(
+                            alignment=MainAxisAlignment.CENTER,
                             expand=True,
                             controls=[
                                 _main_column_,
@@ -179,10 +200,9 @@ def main(page: Page):
         )
     )
 
-
-#here i where all function are been called 
+    # Here is where all functions are being called
     page.update()
-    form =page.controls[0].content.controls[0].content.controls[1].controls[0]
+    form = page.controls[0].content.controls[0].content.controls[1].controls[0]
 
 if __name__ == "__main__":
     flet.app(target=main)
